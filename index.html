@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PDF Upload & Viewer</title>
+    <title>Upload & Store PDF</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -26,11 +26,11 @@
 </head>
 <body>
 
-    <h1>Upload & View PDF</h1>
+    <h1>Upload & Store PDF</h1>
 
     <!-- File Upload Input -->
     <input type="file" id="pdfUpload" accept="application/pdf">
-    <br>
+    <button onclick="uploadFile()">Upload PDF</button>
 
     <!-- Download Button -->
     <a id="downloadLink" style="display:none;" download>
@@ -42,28 +42,40 @@
     <iframe id="pdfViewer"></iframe>
 
     <script>
-        document.getElementById("pdfUpload").addEventListener("change", function(event) {
-            let file = event.target.files[0];
+        async function uploadFile() {
+            const fileInput = document.getElementById("pdfUpload");
+            const file = fileInput.files[0];
 
-            if (file && file.type === "application/pdf") {
-                let fileURL = URL.createObjectURL(file);
-
-                // Show the iframe and update the source
-                let pdfViewer = document.getElementById("pdfViewer");
-                pdfViewer.src = fileURL;
-                pdfViewer.style.display = "block";
-
-                // Set the download link
-                let downloadLink = document.getElementById("downloadLink");
-                downloadLink.href = fileURL;
-                downloadLink.style.display = "inline-block";
-
-                // Show the title
-                document.getElementById("pdfTitle").style.display = "block";
-            } else {
-                alert("Please select a valid PDF file.");
+            if (!file) {
+                alert("Please select a file first!");
+                return;
             }
-        });
+
+            const formData = new FormData();
+            formData.append("pdf", file);
+
+            try {
+                let response = await fetch("http://localhost:3000/upload", {
+                    method: "POST",
+                    body: formData
+                });
+
+                let result = await response.json();
+
+                // Update PDF Viewer and Download Link
+                let pdfURL = "http://localhost:3000" + result.filePath;
+                document.getElementById("pdfViewer").src = pdfURL;
+                document.getElementById("pdfViewer").style.display = "block";
+
+                document.getElementById("downloadLink").href = pdfURL;
+                document.getElementById("downloadLink").style.display = "inline-block";
+
+                document.getElementById("pdfTitle").style.display = "block";
+
+            } catch (error) {
+                console.error("Error uploading file:", error);
+            }
+        }
     </script>
 
 </body>
