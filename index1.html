@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF Upload & Viewer</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin: 20px;
+        }
+        input, button {
+            margin: 10px;
+            padding: 10px;
+            font-size: 16px;
+        }
+        iframe {
+            width: 100%;
+            height: 500px;
+            border: 1px solid #ccc;
+            margin-top: 20px;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Upload & View PDF</h1>
+
+    <!-- File Upload Input -->
+    <input type="file" id="pdfUpload" accept="application/pdf">
+    <br>
+
+    <!-- Download Button -->
+    <a id="downloadLink" style="display:none;" download>
+        <button>📥 Download PDF</button>
+    </a>
+
+    <!-- View PDF -->
+    <h2 id="pdfTitle" style="display:none;">View PDF</h2>
+    <iframe id="pdfViewer"></iframe>
+
+    <script>
+        document.getElementById("pdfUpload").addEventListener("change", function(event) {
+            let file = event.target.files[0];
+
+            if (file && file.type === "application/pdf") {
+                let fileURL = URL.createObjectURL(file);
+
+                // Show the iframe and update the source
+                let pdfViewer = document.getElementById("pdfViewer");
+                pdfViewer.src = fileURL;
+                pdfViewer.style.display = "block";
+
+                // Set the download link
+                let downloadLink = document.getElementById("downloadLink");
+                downloadLink.href = fileURL;
+                downloadLink.style.display = "inline-block";
+
+                // Show the title
+                document.getElementById("pdfTitle").style.display = "block";
+            } else {
+                alert("Please select a valid PDF file.");
+            }
+        });
+    </script>
+
+</body>
+</html>
