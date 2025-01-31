@@ -3,50 +3,68 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PDF Viewer & Download</title>
+    <title>PDF Upload & Viewer</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             text-align: center;
             margin: 20px;
         }
-        a {
-            display: inline-block;
+        input, button {
             margin: 10px;
-            padding: 10px 20px;
-            text-decoration: none;
-            color: white;
-            background-color: #007bff;
-            border-radius: 5px;
-        }
-        a:hover {
-            background-color: #0056b3;
+            padding: 10px;
+            font-size: 16px;
         }
         iframe {
             width: 100%;
             height: 500px;
             border: 1px solid #ccc;
             margin-top: 20px;
+            display: none;
         }
     </style>
 </head>
 <body>
 
-    <h1>PDF File Viewer & Download</h1>
+    <h1>Upload & View PDF</h1>
 
-    <!-- Download PDF -->
-    <a href="your-file.pdf" download>📥 Download PDF</a>
+    <!-- File Upload Input -->
+    <input type="file" id="pdfUpload" accept="application/pdf">
+    <br>
 
-    <!-- Open PDF in New Tab -->
-    <a href="your-file.pdf" target="_blank">📖 Open PDF in New Tab</a>
+    <!-- Download Button -->
+    <a id="downloadLink" style="display:none;" download>
+        <button>📥 Download PDF</button>
+    </a>
 
-    <!-- Embed PDF in the Webpage -->
-    <h2>View PDF Below</h2>
-    <iframe src="your-file.pdf"></iframe>
+    <!-- View PDF -->
+    <h2 id="pdfTitle" style="display:none;">View PDF</h2>
+    <iframe id="pdfViewer"></iframe>
 
-    <!-- Google Drive Embedded PDF Example -->
-    <h2>Google Drive PDF</h2>
-    <iframe src="https://drive.google.com/file/d/YOUR_FILE_ID/preview"></iframe>
+    <script>
+        document.getElementById("pdfUpload").addEventListener("change", function(event) {
+            let file = event.target.files[0];
+
+            if (file && file.type === "application/pdf") {
+                let fileURL = URL.createObjectURL(file);
+
+                // Show the iframe and update the source
+                let pdfViewer = document.getElementById("pdfViewer");
+                pdfViewer.src = fileURL;
+                pdfViewer.style.display = "block";
+
+                // Set the download link
+                let downloadLink = document.getElementById("downloadLink");
+                downloadLink.href = fileURL;
+                downloadLink.style.display = "inline-block";
+
+                // Show the title
+                document.getElementById("pdfTitle").style.display = "block";
+            } else {
+                alert("Please select a valid PDF file.");
+            }
+        });
+    </script>
 
 </body>
 </html>
