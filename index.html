@@ -3,127 +3,60 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login Page</title>
+    <title>Sign Up</title>
     <style>
-        /* General Styles */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: Arial, sans-serif;
-        }
         body {
+            font-family: Arial, sans-serif;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
-            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            background-color: #f4f4f4;
         }
-        .login-container {
+        .container {
             background: white;
             padding: 20px;
             border-radius: 10px;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-            width: 300px;
-            text-align: center;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
         }
-        h2 {
-            margin-bottom: 20px;
-            color: #333;
-        }
-        .input-group {
-            position: relative;
-            margin-bottom: 15px;
-        }
-        input {
+        input, button {
             width: 100%;
             padding: 10px;
-            font-size: 16px;
+            margin: 10px 0;
             border: 1px solid #ccc;
             border-radius: 5px;
         }
-        .password-wrapper {
-            position: relative;
-        }
-        .toggle-password {
-            position: absolute;
-            right: 10px;
-            top: 50%;
-            transform: translateY(-50%);
-            cursor: pointer;
-            font-size: 14px;
-            color: #555;
-        }
         button {
-            width: 100%;
-            padding: 10px;
-            font-size: 16px;
-            border: none;
-            border-radius: 5px;
-            background: #2a5298;
+            background: #28a745;
             color: white;
+            border: none;
             cursor: pointer;
-            transition: 0.3s;
         }
         button:hover {
-            background: #1e3c72;
-        }
-        .error {
-            color: red;
-            font-size: 14px;
-            margin-top: 5px;
+            background: #218838;
         }
     </style>
-    <a href="https://raw.githubusercontent.com/KunalSnippet/KCODE/refs/heads/main/backend" target="_blank">Open PDF</a>
-    <a href="https://raw.githubusercontent.com/KunalSnippet/KCODE/refs/heads/main/db.js" target="_blank">Open PDF</a>
-    <a href="https://raw.githubusercontent.com/KunalSnippet/KCODE/refs/heads/main/firebaseadmin.js" target="_blank">Open PDF</a>
-    <a href="https://raw.githubusercontent.com/KunalSnippet/KCODE/refs/heads/main/login.env" target="_blank">Open PDF</a>
-    <a href="https://raw.githubusercontent.com/KunalSnippet/KCODE/refs/heads/main/server.js" target="_blank">Open PDF</a>
-
 </head>
 <body>
-
-    <div class="login-container">
-        <h2>Login</h2>
-        <div class="input-group">
-            <input type="text" id="username" placeholder="Username">
-        </div>
-        <div class="input-group password-wrapper">
-            <input type="password" id="password" placeholder="Password">
-            <span class="toggle-password" onclick="togglePassword()">👁️</span>
-        </div>
-        <p id="errorMessage" class="error"></p>
-        <button onclick="login()">Login</button>
+    <div class="container">
+        <h2>Sign Up</h2>
+        <input type="text" id="username" placeholder="Username" required>
+        <input type="email" id="email" placeholder="Email" required>
+        <input type="password" id="password" placeholder="Password" required>
+        <button onclick="signup()">Sign Up</button>
     </div>
-
     <script>
-        function togglePassword() {
-            const passwordInput = document.getElementById("password");
-            if (passwordInput.type === "password") {
-                passwordInput.type = "text";
+        function signup() {
+            const username = document.getElementById('username').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            
+            if (username && email && password) {
+                alert('Sign up successful!');
             } else {
-                passwordInput.type = "password";
-            }
-        }
-
-        function login() {
-            const username = document.getElementById("username").value;
-            const password = document.getElementById("password").value;
-            const errorMessage = document.getElementById("errorMessage");
-
-            if (username === "" || password === "") {
-                errorMessage.textContent = "Please fill in all fields!";
-                return;
-            }
-
-            if (username === "admin" && password === "password123") {
-                alert("Login Successful!");
-                window.location.href = "dashboard.html"; // Redirect after login
-            } else {
-                errorMessage.textContent = "Invalid username or password!";
+                alert('Please fill in all fields.');
             }
         }
     </script>
-
 </body>
 </html>
