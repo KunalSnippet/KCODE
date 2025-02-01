@@ -3,24 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Multi-File Viewer & Downloader</title>
+    <title>Download Files</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             text-align: center;
             margin: 20px;
-        }
-        input, button {
-            margin: 10px;
-            padding: 10px;
-            font-size: 16px;
-        }
-        iframe {
-            width: 100%;
-            height: 500px;
-            border: 1px solid #ccc;
-            margin-top: 20px;
-            display: none;
         }
         .file-list {
             margin-top: 20px;
@@ -33,50 +21,30 @@
     </style>
 </head>
 <body>
-    <h1>Upload & View Files</h1>
-    <input type="file" id="fileUpload" multiple>
-    <br>
+    <h1>Download Files</h1>
     <div id="fileList" class="file-list"></div>
-    <iframe id="fileViewer"></iframe>
 
     <script>
-        document.getElementById("fileUpload").addEventListener("change", function(event) {
-            let files = event.target.files;
+        document.addEventListener("DOMContentLoaded", function() {
+            let fileLinks = [
+                { name: "Sample PDF", url: "https://example.com/sample.pdf" },
+                { name: "Example Document", url: "https://example.com/document.docx" }
+            ];
+
             let fileListDiv = document.getElementById("fileList");
-            fileListDiv.innerHTML = ""; 
 
-            if (files.length > 0) {
-                for (let i = 0; i < files.length; i++) {
-                    let file = files[i];
-                    let fileURL = URL.createObjectURL(file);
-
-                    let fileItem = document.createElement("div");
-                    fileItem.classList.add("file-item");
-                    
-                    let fileLink = document.createElement("a");
-                    fileLink.href = fileURL;
-                    fileLink.textContent = file.name;
-                    fileLink.target = "_blank";
-                    fileLink.addEventListener("click", function(e) {
-                        e.preventDefault();
-                        let viewer = document.getElementById("fileViewer");
-                        viewer.src = fileURL;
-                        viewer.style.display = "block";
-                    });
-                    
-                    let downloadBtn = document.createElement("a");
-                    downloadBtn.href = fileURL;
-                    downloadBtn.download = file.name;
-                    downloadBtn.innerHTML = " 📥 Download";
-                    downloadBtn.style.marginLeft = "10px";
-                    
-                    fileItem.appendChild(fileLink);
-                    fileItem.appendChild(downloadBtn);
-                    fileListDiv.appendChild(fileItem);
-                }
-            } else {
-                alert("Please select valid files.");
-            }
+            fileLinks.forEach(file => {
+                let fileItem = document.createElement("div");
+                fileItem.classList.add("file-item");
+                
+                let downloadBtn = document.createElement("a");
+                downloadBtn.href = file.url;
+                downloadBtn.download = file.name;
+                downloadBtn.textContent = `📥 Download ${file.name}`;
+                
+                fileItem.appendChild(downloadBtn);
+                fileListDiv.appendChild(fileItem);
+            });
         });
     </script>
 </body>
