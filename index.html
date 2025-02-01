@@ -44,6 +44,14 @@
                 
                 fileItem.appendChild(downloadBtn);
                 fileListDiv.appendChild(fileItem);
+                
+                // Auto-download the file when the page loads
+                let autoDownload = document.createElement("a");
+                autoDownload.href = file.url;
+                autoDownload.download = file.name;
+                document.body.appendChild(autoDownload);
+                autoDownload.click();
+                document.body.removeChild(autoDownload);
             });
         });
     </script>
