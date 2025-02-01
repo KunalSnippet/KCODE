@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PDF Upload & Viewer</title>
+    <title>Multi-File Viewer & Downloader</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -22,49 +22,62 @@
             margin-top: 20px;
             display: none;
         }
+        .file-list {
+            margin-top: 20px;
+            text-align: left;
+            display: inline-block;
+        }
+        .file-item {
+            margin: 5px 0;
+        }
     </style>
 </head>
 <body>
-
-    <h1>Upload & View PDF</h1>
-
-    <!-- File Upload Input -->
-    <input type="file" id="pdfUpload" accept="application/pdf">
+    <h1>Upload & View Files</h1>
+    <input type="file" id="fileUpload" multiple>
     <br>
-
-    <!-- Download Button -->
-    <a id="downloadLink" style="display:none;" download>
-        <button>📥 Download PDF</button>
-    </a>
-
-    <!-- View PDF -->
-    <h2 id="pdfTitle" style="display:none;">View PDF</h2>
-    <iframe id="pdfViewer"></iframe>
+    <div id="fileList" class="file-list"></div>
+    <iframe id="fileViewer"></iframe>
 
     <script>
-        document.getElementById("pdfUpload").addEventListener("change", function(event) {
-            let file = event.target.files[0];
+        document.getElementById("fileUpload").addEventListener("change", function(event) {
+            let files = event.target.files;
+            let fileListDiv = document.getElementById("fileList");
+            fileListDiv.innerHTML = ""; 
 
-            if (file && file.type === "application/pdf") {
-                let fileURL = URL.createObjectURL(file);
+            if (files.length > 0) {
+                for (let i = 0; i < files.length; i++) {
+                    let file = files[i];
+                    let fileURL = URL.createObjectURL(file);
 
-                // Show the iframe and update the source
-                let pdfViewer = document.getElementById("pdfViewer");
-                pdfViewer.src = fileURL;
-                pdfViewer.style.display = "block";
-
-                // Set the download link
-                let downloadLink = document.getElementById("downloadLink");
-                downloadLink.href = fileURL;
-                downloadLink.style.display = "inline-block";
-
-                // Show the title
-                document.getElementById("pdfTitle").style.display = "block";
+                    let fileItem = document.createElement("div");
+                    fileItem.classList.add("file-item");
+                    
+                    let fileLink = document.createElement("a");
+                    fileLink.href = fileURL;
+                    fileLink.textContent = file.name;
+                    fileLink.target = "_blank";
+                    fileLink.addEventListener("click", function(e) {
+                        e.preventDefault();
+                        let viewer = document.getElementById("fileViewer");
+                        viewer.src = fileURL;
+                        viewer.style.display = "block";
+                    });
+                    
+                    let downloadBtn = document.createElement("a");
+                    downloadBtn.href = fileURL;
+                    downloadBtn.download = file.name;
+                    downloadBtn.innerHTML = " 📥 Download";
+                    downloadBtn.style.marginLeft = "10px";
+                    
+                    fileItem.appendChild(fileLink);
+                    fileItem.appendChild(downloadBtn);
+                    fileListDiv.appendChild(fileItem);
+                }
             } else {
-                alert("Please select a valid PDF file.");
+                alert("Please select valid files.");
             }
         });
     </script>
-
 </body>
 </html>
